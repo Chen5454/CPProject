@@ -85,7 +85,7 @@ void APlayerChar::RotateX(float amount)
 
 void APlayerChar::RotateY(float amount)
 {
-	AddControllerPitchInput(200.0f * amount * GetWorld()->GetDeltaSeconds());
+	AddControllerPitchInput(100.0f * amount * GetWorld()->GetDeltaSeconds());
 }
 
 float APlayerChar::TakeDamage(float Damage, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser)
