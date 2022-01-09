@@ -49,6 +49,7 @@ void APlayerChar::SetupPlayerInputComponent(UInputComponent* PlayerInputComponen
 
 
 	PlayerInputComponent->BindAction("Jump", IE_Pressed, this, &APlayerChar::Jump); // Action - When WE pressed the key
+	PlayerInputComponent->BindAction("Attack", IE_Pressed, this, &APlayerChar::OnAttack);
 
 	//PlayerInputComponent->BindAction("Attack", IE_Pressed, this, &APlayerChar::OnAttack);  // Later added Attack
 }
@@ -80,7 +81,7 @@ void APlayerChar::MoveRight(float amount)
 
 void APlayerChar::RotateX(float amount)
 {
-	AddControllerYawInput(200.0f * amount * GetWorld()->GetDeltaSeconds());  // Time.DeltaTime Unity Thingy for frame
+	AddControllerYawInput(100.0f * amount * GetWorld()->GetDeltaSeconds());  // Time.DeltaTime Unity Thingy for frame
 }
 
 void APlayerChar::RotateY(float amount)
@@ -88,7 +89,17 @@ void APlayerChar::RotateY(float amount)
 	AddControllerPitchInput(100.0f * amount * GetWorld()->GetDeltaSeconds());
 }
 
+void APlayerChar::OnAttack()
+{
+}
+
 float APlayerChar::TakeDamage(float Damage, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser)
 {
 	return 0.0f;
 }
+
+void APlayerChar::OnOverlapBegin(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
+{
+}
+
+
