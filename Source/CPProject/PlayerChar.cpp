@@ -4,6 +4,9 @@
 #include "PlayerChar.h"
 #include "Components/CapsuleComponent.h"
 
+#include "Projectile.h"
+#include "Components/SphereComponent.h"
+
 
 // Sets default values
 APlayerChar::APlayerChar()
@@ -11,15 +14,21 @@ APlayerChar::APlayerChar()
  	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
+	AttackCD = 1.5f;
+	canAttack = true;
+	attackStarted = false;
+	LastTimeAttack = 0.0f;
+
+
 	triggerCapsula = CreateDefaultSubobject<UCapsuleComponent>(TEXT("Trigger Capsule"));
 	triggerCapsula->InitCapsuleSize(55.0f, 96.0f); // Size of the Capsule
 	triggerCapsula->GetComponentRotation();
 	triggerCapsula->SetCollisionProfileName(TEXT("Trigger")); // name for our Capsule
 	triggerCapsula->SetupAttachment(RootComponent);
 
-	//triggerCapsula->OnComponentBeginOverlap.AddDynamic
+	triggerCapsula->OnComponentBeginOverlap.AddDynamic(this, &APlayerChar::OnOverlapBegin);
 
-
+	projectileImpulse = 5000;
 }
 
 // Called when the game starts or when spawned
@@ -33,6 +42,13 @@ void APlayerChar::BeginPlay()
 void APlayerChar::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+
+	LastTimeAttack += DeltaTime;
+	if (LastTimeAttack> AttackCD&& !canAttack)
+	{
+		canAttack = true;
+		LastTimeAttack = 0;
+	}
 
 }
 
@@ -91,6 +107,25 @@ void APlayerChar::RotateY(float amount)
 
 void APlayerChar::OnAttack()
 {
+	attackStarted = true;
+
+	if (canAttack)
+	{
+		FVector fwd = GetActorForwardVector();
+		FVector nozzle = GetMesh()->GetBoneLocation("CATRigRibcage003Bone001"); // Need to added the Bone
+
+		nozzle += fwd * 55;
+
+		AProjectile* projectile = GetWorld()->SpawnActor<AProjectile>(BPFireball,nozzle,RootComponent->GetComponentRotation());
+
+		canAttack = false;
+		if (projectile)
+		{
+			projectile->ColisionSphere->AddImpulse(fwd * projectileImpulse);
+		}
+
+	}
+
 }
 
 float APlayerChar::TakeDamage(float Damage, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser)

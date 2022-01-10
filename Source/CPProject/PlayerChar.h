@@ -68,4 +68,9 @@ public:
 
 	bool canAttack;
 
+	UPROPERTY(EditAnywhere);
+	UClass* BPFireball;
+
+	UPROPERTY(EditAnywhere);
+	float projectileImpulse;
 };
