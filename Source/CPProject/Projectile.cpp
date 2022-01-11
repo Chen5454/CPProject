@@ -43,12 +43,12 @@ void AProjectile::OnOverlapBegin(UPrimitiveComponent* HitComp, AActor* OtherActo
 {
 	//Here we gonna apply the Damage - we will call other actor
 
-	if (OtherComp!= OtherActor->GetRootComponent())  //when we collide with the root comp, the root comp is what we goona use to coolide/detect with the projectil
-	{
-		return;
-	}
+	//if (OtherComp!= OtherActor->GetRootComponent())  //when we collide with the root comp, the root comp is what we goona use to coolide/detect with the projectil
+	//{
+	//	return;
+	//}
 
-	OtherActor->TakeDamage(Damage, FDamageEvent(), NULL, this);
+	//OtherActor->TakeDamage(Damage, FDamageEvent(), NULL, this); //Will do X Damage Later on
 
 
 	Destroy();
