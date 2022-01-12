@@ -48,7 +48,7 @@ void AProjectile::OnOverlapBegin(UPrimitiveComponent* HitComp, AActor* OtherActo
 	//	return;
 	//}
 
-	//OtherActor->TakeDamage(Damage, FDamageEvent(), NULL, this); //Will do X Damage Later on
+	OtherActor->TakeDamage(Damage, FDamageEvent(), NULL, this); //Will do X Damage Later on
 
 
 	Destroy();
