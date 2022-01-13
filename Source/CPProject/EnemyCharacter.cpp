@@ -34,13 +34,51 @@ AEnemyCharacter::AEnemyCharacter()
 void AEnemyCharacter::BeginPlay()
 {
 	Super::BeginPlay();
-	
+
+	PlayerRef = Cast<APlayerChar>(UGameplayStatics::GetPlayerPawn(GetWorld(), 0));
+
 }
 
 // Called every frame
 void AEnemyCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+
+	FVector playerPos = PlayerRef->GetActorLocation();
+	FVector distance = playerPos - GetActorLocation();
+	float distanceToPlayer = distance.Size();
+
+	FRotator toPlayerRotation = distance.Rotation();
+	toPlayerRotation.Pitch = 0;
+
+	if (!IsEnemyDead)
+	{
+		RootComponent->SetWorldRotation(toPlayerRotation);
+	}
+
+
+
+	if (distanceToPlayer > EnemySightSphere->GetScaledSphereRadius())
+	{
+		IsEnemyAttacking = false;
+		return;
+	}
+
+	if (IsInAttackRange(distanceToPlayer)&&!IsEnemyDead)
+	{
+		if (LastTimeEnemyAttack ==0)
+		{
+			Attack(PlayerRef);
+		}
+
+		LastTimeEnemyAttack += DeltaTime;
+		if (LastTimeEnemyAttack>EnemyAttackCD)
+		{
+			LastTimeEnemyAttack = 0;
+		}
+
+		return;
+	}
 
 }
 
@@ -53,6 +91,9 @@ void AEnemyCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComp
 
 void AEnemyCharacter::Attack(AActor* AttackTarget)
 {
+
+	UE_LOG(LogTemp, Warning, TEXT("Enenmy is attacking"));
+
 }
 
 float AEnemyCharacter::TakeDamage(float Damage, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser)
