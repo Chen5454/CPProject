@@ -92,7 +92,18 @@ void AEnemyCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComp
 void AEnemyCharacter::Attack(AActor* AttackTarget)
 {
 
-	UE_LOG(LogTemp, Warning, TEXT("Enenmy is attacking"));
+	UE_LOG(LogTemp, Warning, TEXT("Enenmy is attacking"));  //Testing that the collder working while colld :D
+
+	if (BPProjectile)
+	{
+		IsEnemyAttacking = true;
+		//FVector fwd = GetACtorVe
+
+
+
+
+
+	}
 
 }
 
