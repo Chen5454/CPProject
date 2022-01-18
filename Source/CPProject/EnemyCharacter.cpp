@@ -44,6 +44,8 @@ void AEnemyCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+	//calculate player location
+
 	FVector playerPos = PlayerRef->GetActorLocation();
 	FVector distance = playerPos - GetActorLocation();
 	float distanceToPlayer = distance.Size();
@@ -97,18 +99,43 @@ void AEnemyCharacter::Attack(AActor* AttackTarget)
 	if (BPProjectile)
 	{
 		IsEnemyAttacking = true;
-		//FVector fwd = GetACtorVe
+		FVector fwd = GetActorForwardVector();
+		FVector nozzle = GetMesh()->GetBoneLocation("Mouth_end");
+
+		nozzle += fwd * 55;
 
 
+		FVector ToOpponent = AttackTarget->GetActorLocation() - nozzle;
 
+		ToOpponent.Normalize();
 
+		AProjectile* projectile = GetWorld()->SpawnActor<AProjectile>(BPProjectile, nozzle, RootComponent->GetComponentRotation());
 
+		if (projectile)
+		{
+			projectile->ColisionSphere->AddImpulse(fwd * ProjectilImpulse);
+		}
+
+	}
+	else
+	{
+		UE_LOG(LogTemp, Error, TEXT("No BPProjectile Found"));
 	}
 
 }
 
 float AEnemyCharacter::TakeDamage(float Damage, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser)
 {
+
+	Hp -= Damage;
+
+	if (Hp<=0)
+	{
+		IsEnemyDead = true;
+	}
+
+
+
 	return 0.0f;
 }
 

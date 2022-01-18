@@ -45,7 +45,7 @@ public:
 	UPROPERTY(EditAnywhere)
 		float EnemyAttackCD;
 
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		float LastTimeEnemyAttack;
 
 	UPROPERTY(EditAnywhere,BlueprintReadWrite)

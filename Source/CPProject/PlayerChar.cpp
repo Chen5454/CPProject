@@ -7,6 +7,8 @@
 #include "Projectile.h"
 #include "Components/SphereComponent.h"
 
+#include "Kismet/GameplayStatics.h"
+//#include "PickupItems.h"
 
 // Sets default values
 APlayerChar::APlayerChar()
@@ -130,6 +132,19 @@ void APlayerChar::OnAttack()
 
 float APlayerChar::TakeDamage(float Damage, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser)
 {
+
+	hp -= Damage;
+
+	if (hp <= 0)
+	{
+		hp = 0;
+
+
+		dead = true;
+
+		//UGameplayStatics::OpenLevel(this, FName(*GetWorld()->GetName()), false);  //Restart Level/Game
+	}
+
 	return 0.0f;
 }
 

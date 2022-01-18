@@ -28,7 +28,7 @@ public:
 	virtual void Tick(float DeltaTime) override;
 
 
-	UPROPERTY(BlueprintReadWrite)
+	UPROPERTY(EditAnywhere)
 		float Damage;
 
 	UPROPERTY(EditAnywhere)
