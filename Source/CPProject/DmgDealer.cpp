@@ -5,12 +5,13 @@
 
 #include "Components/BoxComponent.h"
 
-
 // Sets default values
 ADmgDealer::ADmgDealer()
 {
 	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
+
+	isTrigger = false;
 
 	DamageBox = CreateDefaultSubobject<UBoxComponent>(TEXT("Damage Box")); //Create Damage box == GetComponnent(Unity)
 
@@ -23,6 +24,8 @@ ADmgDealer::ADmgDealer()
 	Mesh->SetupAttachment(DamageBox); // going to put it below in the hirjaja
 
 
+	MySkeletalMesh = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("My Skeletal Mesh Component"));
+	MySkeletalMesh->SetupAttachment(DamageBox);
 }
 
 // Called when the game starts or when spawned
@@ -41,5 +44,16 @@ void ADmgDealer::Tick(float DeltaTime)
 
 void ADmgDealer::OnBeginOverlap(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
+	
+	if (isTrigger)
+	{
+		OtherActor->TakeDamage(Damage, FDamageEvent(), NULL, this);
+	
+	}
+	else
+	{
+		isTrigger = true;
+		
+	}
 }
 
