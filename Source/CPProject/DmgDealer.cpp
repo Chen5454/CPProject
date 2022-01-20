@@ -60,6 +60,7 @@ void ADmgDealer::OnBeginOverlap(UPrimitiveComponent* HitComp, AActor* OtherActor
 		return;
 	}
 
+	
 		OtherActor->TakeDamage(Damage, FDamageEvent(), NULL, this);
 	
 
