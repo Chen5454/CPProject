@@ -6,6 +6,8 @@
 
 #include "Projectile.h"
 #include "Components/SphereComponent.h"
+#include "GameFramework/CharacterMovementComponent.h"
+#include "Math/Vector.h"
 
 #include "Kismet/GameplayStatics.h"
 //#include "PickupItems.h"
@@ -21,6 +23,12 @@ APlayerChar::APlayerChar()
 	attackStarted = false;
 	LastTimeAttack = 0.0f;
 
+	//***Character Falling Damage Properties****
+	
+	//PreviousVelocity = FVector(0.f, 0.f, 0.f);
+	//CanTakeDamage = false;
+	//SafeFallVelocity = 1000.f;
+	//FallDamageMultiplier = .1f;
 
 	triggerCapsula = CreateDefaultSubobject<UCapsuleComponent>(TEXT("Trigger Capsule"));
 	triggerCapsula->InitCapsuleSize(55.0f, 96.0f); // Size of the Capsule
@@ -51,6 +59,28 @@ void APlayerChar::Tick(float DeltaTime)
 		canAttack = true;
 		LastTimeAttack = 0;
 	}
+	
+
+	//****Charcter Falling damage calculation - not working******
+
+
+
+	//if (!CanTakeDamage) return;
+
+	//// We deal with some big numbers here to avoid using sqrtf() every tick
+
+	//FVector Velocity = GetCharacterMovement()->Velocity.GetAbs();
+	//FVector DeltaVelocitySquared = (Velocity - PreviousVelocity.GetAbs()) * (Velocity - PreviousVelocity.GetAbs());
+	//float DeltaSpeed = DeltaVelocitySquared.X + DeltaVelocitySquared.Y + DeltaVelocitySquared.Z;
+
+	//if (DeltaSpeed > (SafeFallVelocity * SafeFallVelocity))
+	//{
+	//	// In this case, we have a sudden stop, and one that's sudden enough to cause damage. This should be rare enough that we can afford a sqrtf()
+	//	float Damage = sqrtf(DeltaSpeed) * FallDamageMultiplier;
+	//	TakeDamage(Damage, FDamageEvent(), GetController(), this);
+	//}
+
+	//PreviousVelocity = Velocity;
 
 }
 
@@ -144,6 +174,8 @@ float APlayerChar::TakeDamage(float Damage, FDamageEvent const& DamageEvent, ACo
 
 		//UGameplayStatics::OpenLevel(this, FName(*GetWorld()->GetName()), false);  //Restart Level/Game
 	}
+
+
 
 	return 0.0f;
 }

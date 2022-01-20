@@ -48,6 +48,18 @@ public:
 	UPROPERTY(EditAnywhere); //Can see inside Bp AND Editor - 
 	UCapsuleComponent* triggerCapsula;
 
+	//UPROPERTY(EditAnywhere, BlueprintReadWrite);
+	//bool CanTakeDamage;
+
+	//UPROPERTY(EditAnywhere, BlueprintReadWrite);
+	//float SafeFallVelocity;
+
+	//UPROPERTY(EditAnywhere, BlueprintReadWrite);
+	//float FallDamageMultiplier;
+
+	//FVector PreviousVelocity;
+
+
 	void MoveForward(float amount);
 	void MoveRight(float amount);
 	void RotateX(float amount);
