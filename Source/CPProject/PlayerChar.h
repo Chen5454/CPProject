@@ -33,8 +33,8 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly);
 	float hp;
 
-	UPROPERTY(BlueprintReadOnly);
-	int score;
+	UPROPERTY(EditAnywhere,BlueprintReadWrite);
+	int Score;
 
 	UPROPERTY(BlueprintReadOnly);
 	bool hasKey;
