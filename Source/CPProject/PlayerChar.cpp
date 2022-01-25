@@ -185,24 +185,14 @@ float APlayerChar::TakeDamage(float Damage, FDamageEvent const& DamageEvent, ACo
 
 void APlayerChar::OnOverlapBegin(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
-	if (Cast<APickUpItem>(OtherActor))
-	{
+	
 
-
-		if (OtherActor->ActorHasTag("Key"))
-		{
-			Score += 500;
-
-			hasKey = true;
-		}
-		else
-		{
+		
 			Score += 100;
 
-		}
-
+		
 		OtherActor->Destroy();
-	}
+	
 }
 
 
