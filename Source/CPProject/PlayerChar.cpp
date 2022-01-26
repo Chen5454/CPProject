@@ -26,7 +26,7 @@ APlayerChar::APlayerChar()
 	canAttack = true;
 	attackStarted = false;
 	LastTimeAttack = 0.0f;
-
+	Score = 0;
 	//***Character Falling Damage Properties****
 	
 	//PreviousVelocity = FVector(0.f, 0.f, 0.f);
@@ -34,12 +34,14 @@ APlayerChar::APlayerChar()
 	//SafeFallVelocity = 1000.f;
 	//FallDamageMultiplier = .1f;
 
-	triggerCapsula = CreateDefaultSubobject<UCapsuleComponent>(TEXT("Trigger Capsule"));
-	triggerCapsula->InitCapsuleSize(55.0f, 96.0f); // Size of the Capsule
-	triggerCapsula->SetCollisionProfileName(TEXT("Trigger")); // name for our Capsule
-	triggerCapsula->SetupAttachment(RootComponent);
+	TriggerCapsula = CreateDefaultSubobject<UCapsuleComponent>(TEXT("Trigger Capsule"));
+	TriggerCapsula->InitCapsuleSize(55.0f, 96.0f); // Size of the Capsule
+	TriggerCapsula->SetCollisionProfileName(TEXT("Trigger")); // name for our Capsule
+	TriggerCapsula->SetupAttachment(RootComponent);
 
-	triggerCapsula->OnComponentBeginOverlap.AddDynamic(this, &APlayerChar::OnOverlapBegin);
+	TriggerCapsula->OnComponentBeginOverlap.AddDynamic(this, &APlayerChar::OnOverlapBegin);
+
+	//triggerCapsula->OnComponentBeginOverlap.AddDynamic(this, &APlayerChar::OnOverlapBegin);
 
 	projectileImpulse = 5000;
 }
@@ -183,16 +185,51 @@ float APlayerChar::TakeDamage(float Damage, FDamageEvent const& DamageEvent, ACo
 	return 0.0f;
 }
 
+
 void APlayerChar::OnOverlapBegin(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
-	
+
+
+	if (Cast<APickUpItem>(OtherActor))
+	{
+		if (OtherActor->ActorHasTag("Key"))
+		{
+
+			hasKey = true;
+			Score += 500;
+			UE_LOG(LogTemp, Warning, TEXT("Key"));
+
+		}
+		else
+		{
+			UE_LOG(LogTemp, Warning, TEXT("COLLIDE"));
+
+			Score += 100;
+		}
+
+		UE_LOG(LogTemp, Warning, TEXT("The Score is:  %d"), Score);
 
 		
-			Score += 100;
-
 		
 		OtherActor->Destroy();
-	
+	}
+
+
+
+
 }
+
+
+//void APlayerChar::OnOverlapBegin(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
+//{
+//	UE_LOG(LogTemp, Warning, TEXT("COLLIDE"));
+//
+//		
+//			Score += 100;
+//
+//		
+//		OtherActor->Destroy();
+//	
+//}
 
 
