@@ -177,7 +177,7 @@ float APlayerChar::TakeDamage(float Damage, FDamageEvent const& DamageEvent, ACo
 
 		dead = true;
 
-		//UGameplayStatics::OpenLevel(this, FName(*GetWorld()->GetName()), false);  //Restart Level/Game
+		UGameplayStatics::OpenLevel(this, FName(*GetWorld()->GetName()), false);  //Restart Level/Game
 	}
 
 
@@ -200,6 +200,13 @@ void APlayerChar::OnOverlapBegin(UPrimitiveComponent* HitComp, AActor* OtherActo
 			UE_LOG(LogTemp, Warning, TEXT("Key"));
 
 		}
+
+		else if (OtherActor->ActorHasTag(("Gem")))
+		{
+
+			Score += 1000;
+		}
+
 		else
 		{
 			UE_LOG(LogTemp, Warning, TEXT("COLLIDE"));
