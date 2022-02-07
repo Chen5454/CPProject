@@ -33,8 +33,8 @@ public:
 
 	APlayerChar* PlayerRef;
 
-	UPROPERTY(EditAnywhere)
-		float Speed;
+	/*UPROPERTY(EditAnywhere)
+		float Speed;*/
 
 	UPROPERTY(EditAnywhere)
 		float Hp;
@@ -70,7 +70,7 @@ public:
 
 	bool IsInAttackRange(float distance) {
 
-		return distance < AttackRangeSphere->GetScaledSphereRadius(); // Return the  Radius of our sphere and if the distance is less then the attack raginf sphere radius its true, if not false
+		return distance < AttackRangeSphere->GetScaledSphereRadius(); // Return the  Radius of our sphere and if the distance is less then the attack range sphere radius its true, if not false
 
 	}
 

@@ -40,16 +40,16 @@ void ADmgDealer::Tick(float DeltaTime)
 }
 
 
-void ADmgDealer::TimerFunction()
-{
-	CallTracker--;
-
-	if (CallTracker==0)
-	{
-		GetWorldTimerManager().ClearTimer(TimerHandle);
-	}
-	
-}
+//void ADmgDealer::TimerFunction() // timer countdown till it will reset
+//{
+//	CallTracker--;
+//
+//	if (CallTracker==0)
+//	{
+//		GetWorldTimerManager().ClearTimer(TimerHandle);
+//	}
+//	
+//}
 
 
 void ADmgDealer::OnBeginOverlap(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
@@ -61,11 +61,11 @@ void ADmgDealer::OnBeginOverlap(UPrimitiveComponent* HitComp, AActor* OtherActor
 	}
 
 	
-		OtherActor->TakeDamage(Damage, FDamageEvent(), NULL, this);
+		OtherActor->TakeDamage(Damage, FDamageEvent(), NULL, this); // passing Damage as param
 	
 
 		
-	GetWorldTimerManager().SetTimer(TimerHandle, this, &ADmgDealer::TimerFunction, 3.0f, true, 1.0f);
+	//GetWorldTimerManager().SetTimer(TimerHandle, this, &ADmgDealer::TimerFunction, 3.0f, true, 1.0f);
 	
 }
 

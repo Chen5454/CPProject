@@ -39,11 +39,11 @@ APlayerChar::APlayerChar()
 	TriggerCapsula->SetCollisionProfileName(TEXT("Trigger")); // name for our Capsule
 	TriggerCapsula->SetupAttachment(RootComponent);
 
-	TriggerCapsula->OnComponentBeginOverlap.AddDynamic(this, &APlayerChar::OnOverlapBegin);
+	TriggerCapsula->OnComponentBeginOverlap.AddDynamic(this, &APlayerChar::OnOverlapBegin); //this is gonna bind the function on begningoverlap to the OnComponentBeginOverlap
 
 	//triggerCapsula->OnComponentBeginOverlap.AddDynamic(this, &APlayerChar::OnOverlapBegin);
 
-	projectileImpulse = 5000;
+	projectileImpulse = 5000; //the "speed"/explosion of the projectile
 }
 
 // Called when the game starts or when spawned
@@ -59,14 +59,14 @@ void APlayerChar::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 
 	LastTimeAttack += DeltaTime;
-	if (LastTimeAttack> AttackCD&& !canAttack)
+	if (LastTimeAttack> AttackCD&& !canAttack) //timer for attack. 
 	{
 		canAttack = true;
 		LastTimeAttack = 0;
 	}
 	
 
-	//****Charcter Falling damage calculation - not working******
+	//****Character Falling damage calculation - not working******
 
 
 
@@ -132,33 +132,38 @@ void APlayerChar::MoveRight(float amount)
 
 }
 
+// mouse Rotation x and Y for controller
+
 void APlayerChar::RotateX(float amount)
 {
-	AddControllerYawInput(100.0f * amount * GetWorld()->GetDeltaSeconds());  // Time.DeltaTime Unity Thingy for frame
+	AddControllerYawInput(50.0f * amount * GetWorld()->GetDeltaSeconds());  // Time.DeltaTime Unity Thingy for frame
 }
 
 void APlayerChar::RotateY(float amount)
 {
-	AddControllerPitchInput(100.0f * amount * GetWorld()->GetDeltaSeconds());
+	AddControllerPitchInput(50.0f * amount * GetWorld()->GetDeltaSeconds());
 }
 
 void APlayerChar::OnAttack()
 {
+
+	//When we start attacking -
+
 	attackStarted = true;
 
 	if (canAttack)
 	{
 		FVector fwd = GetActorForwardVector();
-		FVector nozzle = GetMesh()->GetBoneLocation("CATRigRibcage003Bone001"); // Need to added the Bone
+		FVector nozzle = GetMesh()->GetBoneLocation("CATRigRibcage003Bone001"); // Need to added the Bone - nozzle - where we want the projectile to go from
 
-		nozzle += fwd * 55;
+		nozzle += fwd * 55; // we multiply the vector so it wont collide with our mesh/collide
 
-		AProjectile* projectile = GetWorld()->SpawnActor<AProjectile>(BPFireball,nozzle,RootComponent->GetComponentRotation());
+		AProjectile* projectile = GetWorld()->SpawnActor<AProjectile>(BPFireball,nozzle,RootComponent->GetComponentRotation());  //we need to specify the location and the rotation for out projectile that we are gonna spawn
+		canAttack = false; // after we attack we disable the attack - for the cd
 
-		canAttack = false;
-		if (projectile)
+		if (projectile) // if we spawned an projectile
 		{
-			projectile->ColisionSphere->AddImpulse(fwd * projectileImpulse);
+			projectile->ColisionSphere->AddImpulse(fwd * projectileImpulse); //launch the projectile
 		}
 
 	}
@@ -190,7 +195,7 @@ void APlayerChar::OnOverlapBegin(UPrimitiveComponent* HitComp, AActor* OtherActo
 {
 
 
-	if (Cast<APickUpItem>(OtherActor))
+	if (Cast<APickUpItem>(OtherActor)) // cast to the pickup item. if the other actor we collide with is from Class APickupitem if so .. so
 	{
 		if (OtherActor->ActorHasTag("Key"))
 		{

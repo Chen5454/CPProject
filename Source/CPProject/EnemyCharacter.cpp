@@ -13,17 +13,17 @@ AEnemyCharacter::AEnemyCharacter()
  	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
-	Speed = 20;
+	//Speed = 20;
 	Hp = 100;
 	EnemyAttackCD = 1.5;
 	LastTimeEnemyAttack = 0;
 
 	ProjectilImpulse = 2000;
-	EnemySightSphere = CreateDefaultSubobject<USphereComponent>(TEXT("SightSphere"));
+	EnemySightSphere = CreateDefaultSubobject<USphereComponent>(TEXT("SightSphere")); //GetComponent -Create Sphere for the sight
 	EnemySightSphere->SetupAttachment(RootComponent);
 
 
-	AttackRangeSphere = CreateDefaultSubobject<USphereComponent>(TEXT("AttackRangeSphere"));
+	AttackRangeSphere = CreateDefaultSubobject<USphereComponent>(TEXT("AttackRangeSphere")); //GetComponent -Create Sphere for the Range
 	AttackRangeSphere->SetupAttachment(RootComponent);
 
 
@@ -35,7 +35,7 @@ void AEnemyCharacter::BeginPlay()
 {
 	Super::BeginPlay();
 
-	PlayerRef = Cast<APlayerChar>(UGameplayStatics::GetPlayerPawn(GetWorld(), 0));
+	PlayerRef = Cast<APlayerChar>(UGameplayStatics::GetPlayerPawn(GetWorld(), 0)); // getting ref for player 
 
 }
 
@@ -46,12 +46,13 @@ void AEnemyCharacter::Tick(float DeltaTime)
 
 	//calculate player location
 
-	FVector playerPos = PlayerRef->GetActorLocation();
-	FVector distance = playerPos - GetActorLocation();
-	float distanceToPlayer = distance.Size();
+	FVector playerPos = PlayerRef->GetActorLocation(); // get the player location
+	FVector distance = playerPos - GetActorLocation(); // the diffrents from player location to the monster enemy 
+	float distanceToPlayer = distance.Size(); // getting the size of the distance diffrent will be how far the player is away from the enemy
 
-	FRotator toPlayerRotation = distance.Rotation();
-	toPlayerRotation.Pitch = 0;
+	// rotate the enemy to the player
+	FRotator toPlayerRotation = distance.Rotation(); 
+	toPlayerRotation.Pitch = 0; // we are not going to rotate him on the pitch
 
 	if (!IsEnemyDead)
 	{
@@ -60,15 +61,15 @@ void AEnemyCharacter::Tick(float DeltaTime)
 
 
 
-	if (distanceToPlayer > EnemySightSphere->GetScaledSphereRadius())
+	if (distanceToPlayer > EnemySightSphere->GetScaledSphereRadius()) // if the distance is higher- which means enemy cant see player
 	{
 		IsEnemyAttacking = false;
 		return;
 	}
 
-	if (IsInAttackRange(distanceToPlayer)&&!IsEnemyDead)
+	if (IsInAttackRange(distanceToPlayer)&&!IsEnemyDead) // if the player is in the attack range and not dead
 	{
-		if (LastTimeEnemyAttack ==0)
+		if (LastTimeEnemyAttack ==0) // if we cooled down we will attack
 		{
 			Attack(PlayerRef);
 		}
@@ -76,7 +77,7 @@ void AEnemyCharacter::Tick(float DeltaTime)
 		LastTimeEnemyAttack += DeltaTime;
 		if (LastTimeEnemyAttack>EnemyAttackCD)
 		{
-			LastTimeEnemyAttack = 0;
+			LastTimeEnemyAttack = 0; // reset the attack timer
 		}
 
 		return;
@@ -94,26 +95,26 @@ void AEnemyCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComp
 void AEnemyCharacter::Attack(AActor* AttackTarget)
 {
 
-	UE_LOG(LogTemp, Warning, TEXT("Enenmy is attacking"));  //Testing that the collder working while colld :D
+	UE_LOG(LogTemp, Warning, TEXT("Enenmy is attacking"));  //Testing that the collider working while collide :D
 
-	if (BPProjectile)
+	if (BPProjectile) // if we do have the Projectile (we need to attatch the bp projectile inside the bp)
 	{
 		IsEnemyAttacking = true;
-		FVector fwd = GetActorForwardVector();
-		FVector nozzle = GetMesh()->GetBoneLocation("Mouth_end");
+		FVector fwd = GetActorForwardVector(); // going to get the forword vector of the enemy
+		FVector nozzle = GetMesh()->GetBoneLocation("Mouth_end"); // same as the player, we need the string of the bone for spawning  projectile
 
-		nozzle += fwd * 55;
+		nozzle += fwd * 55;  // we multiply the vector so it wont collide with our mesh/collide
 
 
-		FVector ToOpponent = AttackTarget->GetActorLocation() - nozzle;
+		FVector ToOpponent = AttackTarget->GetActorLocation() - nozzle; // give us the diffrence in the range between the enemy and player
 
-		ToOpponent.Normalize();
+		ToOpponent.Normalize(); 
 
-		AProjectile* projectile = GetWorld()->SpawnActor<AProjectile>(BPProjectile, nozzle, RootComponent->GetComponentRotation());
+		AProjectile* projectile = GetWorld()->SpawnActor<AProjectile>(BPProjectile, nozzle, RootComponent->GetComponentRotation()); //we need to specify the location and the rotation for out projectile that we are gonna spawn
 
-		if (projectile)
+		if (projectile) // if the projectile spawned
 		{
-			projectile->ColisionSphere->AddImpulse(fwd * ProjectilImpulse);
+			projectile->ColisionSphere->AddImpulse(fwd * ProjectilImpulse); //launch the projectile
 		}
 
 	}

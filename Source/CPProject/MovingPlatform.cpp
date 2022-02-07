@@ -19,50 +19,51 @@ void AMovingPlatform::BeginPlay()
 }
 
 // Called every frame
-void AMovingPlatform::Tick(float DeltaTime)
+void AMovingPlatform::Tick(float DeltaTime) //here we gonna move the platfrom - every tick
 {
 	Super::Tick(DeltaTime);
 
 	if (!isActivatable){
 
 		FVector ActorLocation = GetActorLocation();
-		ActorLocation.Y += platformSpeed;
+		ActorLocation.Y += platformSpeed; 
 
-		if (isDiagonal)
+		if (isDiagonal)					//for Diagonal purpose we will use the Z axis 
 			ActorLocation.Z += platformSpeed;
 
-			SetActorLocation(ActorLocation);
+			SetActorLocation(ActorLocation); // this is how we gonna move our actor - SetActorLocation- build in function
 
-			if (ActorLocation.Y >=firstEnd)
+			if (ActorLocation.Y >=firstEnd) 
 			{
-				platformSpeed *= -1.0f;
+				platformSpeed *= -1.0f;		
 			}
 
 			if (ActorLocation.Y <= secondEnd)
 			{
-				platformSpeed *= -1.0f;
+				platformSpeed *= -1.0f;			// multiplay -1 for negative result to go to the other way around 
 			}
 
-	}else if (isActivatable && activated)
-	{
-		FVector ActorLocation = GetActorLocation();
-		ActorLocation.Y += platformSpeed;
-
-		SetActorLocation(ActorLocation);
-
-		if (ActorLocation.Y >= firstEnd)
-		{
-			platformSpeed *= -1.0f;
-		}
-
-		if (ActorLocation.Y <= secondEnd)
-		{
-			platformSpeed *= -1.0f;
-		}
-
-
-
 	}
+	//else if (isActivatable && activated)           // tested - no needed
+	//{
+	//	FVector ActorLocation = GetActorLocation();
+	//	ActorLocation.Y += platformSpeed;
+
+	//	SetActorLocation(ActorLocation);
+
+	//	if (ActorLocation.Y >= firstEnd)
+	//	{
+	//		platformSpeed *= -1.0f;
+	//	}
+
+	//	if (ActorLocation.Y <= secondEnd)
+	//	{
+	//		platformSpeed *= -1.0f;
+	//	}
+
+
+
+	//}
 
 }
 
